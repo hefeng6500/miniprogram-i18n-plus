@@ -1,0 +1,23 @@
+{
+  "name": "miniprogram-i18n-plus",
+  "version": "0.1.0",
+  "description": "A plugin for miniprogram i18n fuck official miniprogram-i18n",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "rollup -c",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "miniprogram",
+    "i18n"
+  ],
+  "author": "hefeng6500",
+  "license": "MIT",
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^8.3.1",
+    "rollup": "^2.70.1",
+    "rollup-plugin-terser": "^7.0.2",
+    "tslib": "^2.3.1",
+    "typescript": "^4.6.2"
+  }
+}
