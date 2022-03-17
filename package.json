@@ -1,6 +1,6 @@
 {
   "name": "miniprogram-i18n-plus",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A plugin for miniprogram i18n fuck official miniprogram-i18n",
   "main": "dist/index.js",
   "scripts": {
