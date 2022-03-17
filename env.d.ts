@@ -8,3 +8,16 @@ interface i18nEvent {
   emit: Function;
   remove: Function;
 }
+
+interface ILocales {
+  [x: string]: IObject;
+}
+
+interface IObject {
+  [x: string]: string;
+}
+
+interface IEffectOptions {
+  context: any;
+  callback: Function;
+}

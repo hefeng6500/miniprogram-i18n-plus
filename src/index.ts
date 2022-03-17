@@ -1,3 +1,5 @@
+const LANGUAGE_CHANGE_EVENT = "languageChangeEvent";
+
 export const i18nEvent: i18nEvent = {
   eventMap: {},
 
@@ -34,9 +36,9 @@ export const i18nEvent: i18nEvent = {
 
 export class I18n {
   public locale: string;
-  public locales: any;
+  public locales: ILocales;
 
-  constructor(locales?: any) {
+  constructor(locales?: ILocales) {
     this.locale = "";
     this.locales = locales || {};
   }
@@ -49,9 +51,29 @@ export class I18n {
     return this.locale;
   }
 
-  loadTranslations(locales: Array<any>) {
+  loadTranslations(locales: ILocales) {
     this.locales = locales;
 
+    this.invokeChange();
+  }
+
+  mergeTranslations(newLocales: ILocales) {
+    for (const key in newLocales) {
+      if (this.locales[key]) {
+        this.locales[key] = {
+          ...this.locales[key],
+          ...newLocales[key],
+        };
+      } else {
+        this.locales[key] = newLocales[key];
+      }
+    }
+
+    // NOTICE:
+    // if use track API give a custom name for event,
+    // they will must call trigger API and use custom name as event name
+
+    // update language config after merge data
     this.invokeChange();
   }
 
@@ -71,18 +93,18 @@ export class I18n {
     i18nEvent.emit(name);
   }
 
-  effect(options: any) {
+  effect(options: IEffectOptions) {
     const { context, callback } = options;
 
-    this.track("languageChanged", {
+    this.track(LANGUAGE_CHANGE_EVENT, {
       context,
       callback,
     });
   }
 
   invokeChange() {
-    this.trigger("languageChanged");
+    this.trigger(LANGUAGE_CHANGE_EVENT);
   }
 }
 
-export const i18nStance = new I18n();
+export const i18nInstance = new I18n();
