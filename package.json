@@ -13,6 +13,8 @@
   ],
   "author": "hefeng6500",
   "license": "MIT",
+  "homepage": "https://github.com/hefeng6500/miniprogram-i18n-plus.git",
+  "repository": "https://github.com/hefeng6500/miniprogram-i18n-plus.git",
   "devDependencies": {
     "@rollup/plugin-typescript": "^8.3.1",
     "rollup": "^2.70.1",
