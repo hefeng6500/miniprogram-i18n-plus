@@ -3,6 +3,7 @@
   "version": "0.1.2",
   "description": "A plugin for miniprogram i18n fuck official miniprogram-i18n",
   "main": "dist/index.js",
+  "miniprogram": "dist",
   "scripts": {
     "build": "rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1"
