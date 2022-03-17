@@ -51,6 +51,8 @@ export class I18n {
 
   loadTranslations(locales: Array<any>) {
     this.locales = locales;
+
+    this.invokeChange();
   }
 
   getLanguage() {
