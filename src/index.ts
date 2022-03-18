@@ -1,42 +1,7 @@
-const LANGUAGE_CHANGE_EVENT = "languageChangeEvent";
-
-export const i18nEvent: i18nEvent = {
-  eventMap: {},
-
-  on(name: string, context: any, callback: Function) {
-    let tuple = [context, callback];
-
-    this.eventMap[name] = this.eventMap[name] || [];
-
-    let list = this.eventMap[name];
-
-    list.push(tuple);
-  },
-
-  emit(name: string, params: any) {
-    const list: Array<any> | undefined = this.eventMap[name];
-
-    list?.map((tuple: any) => {
-      const context = tuple[0];
-      const callback = tuple[1];
-
-      callback.apply(context, params);
-    });
-  },
-
-  remove(name: string, context: any) {
-    const list = this.eventMap[name];
-    if (list.length) {
-      this.eventMap[name] = list.filter((tuple: any) => {
-        return tuple[0] !== context;
-      });
-    }
-  },
-};
-
 export class I18n {
   public locale: string;
   public locales: ILocales;
+  public context: any;
 
   constructor(locales?: ILocales) {
     this.locale = "";
@@ -54,7 +19,7 @@ export class I18n {
   loadTranslations(locales: ILocales) {
     this.locales = locales;
 
-    this.invokeChange();
+    return this.context && this.effect(this.context);
   }
 
   mergeTranslations(newLocales: ILocales) {
@@ -69,42 +34,40 @@ export class I18n {
       }
     }
 
-    // NOTICE:
-    // if use track API give a custom name for event,
-    // they will must call trigger API and use custom name as event name
-
-    // update language config after merge data
-    this.invokeChange();
+    return this.context && this.effect(this.context);
   }
 
   getLanguage() {
     return this.locales[this.locale];
   }
 
-  track(eventName: string, options: any) {
-    const { context, callback } = options;
+  effect(context: any) {
+    this.context = context;
 
-    callback();
+    if (!context.setData) {
+      return;
+    }
 
-    i18nEvent.on(eventName, context, callback);
-  }
-
-  trigger(name: string) {
-    i18nEvent.emit(name);
-  }
-
-  effect(options: IEffectOptions) {
-    const { context, callback } = options;
-
-    this.track(LANGUAGE_CHANGE_EVENT, {
-      context,
-      callback,
+    return new Promise((resolve) => {
+      context.setData(
+        {
+          $language: this.getLanguage(),
+        },
+        () => {
+          resolve(context["$language"]);
+        }
+      );
     });
   }
 
-  invokeChange() {
-    this.trigger(LANGUAGE_CHANGE_EVENT);
+  toggleLanguage(locale: string) {
+    this.setLocale(locale);
+
+    return this.effect(this.context);
   }
 }
 
-export const i18nInstance = new I18n();
+const i18nInstance = new I18n();
+
+export default i18nInstance;
+export { i18nInstance };
